@@ -1,0 +1,14 @@
+{
+  "name": "geekster-add",
+  "version": "1.0.0",
+  "description": "this is an example package to store in npm",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "geekster"
+  ],
+  "author": "Shobhit Jaryal",
+  "license": "ISC"
+}

@@ -4,6 +4,9 @@
 const path  = require('path');
 const fs = require('fs');
 const readline = require('readline');
+const add = require('geekster-add')
+
+console.log(add(1, 2), "add");
 
 const tasksFilePath = path.join(__dirname, "task.json");
 
