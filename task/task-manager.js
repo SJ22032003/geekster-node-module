@@ -4,9 +4,6 @@
 const path  = require('path');
 const fs = require('fs');
 const readline = require('readline');
-const add = require('geekster-add')
-
-console.log(add(1, 2), "add");
 
 const tasksFilePath = path.join(__dirname, "task.json");
 
@@ -72,6 +69,15 @@ const deleteTask = (taskNo) => {
 
 }
 
+// add task to txt file
+const moveTasksToTxt = () => {
+  const getTasks = getMyTasks();
+  fs.writeFileSync(path.join(__dirname, "tasks.txt"), '');
+  getTasks.forEach((task, i) => {
+    fs.appendFileSync(path.join(__dirname, "tasks.txt"), `${i+1}. ${task.description} - [${task.completed ? "x" : " "}] \n`);
+  })
+}
+
 function todoManager() {
   rl.question(`What would you like to do?
   1. Add a task
@@ -104,6 +110,7 @@ function todoManager() {
         });
         break;
       case "5":
+        moveTasksToTxt();
         rl.close();
         break;
       default:
