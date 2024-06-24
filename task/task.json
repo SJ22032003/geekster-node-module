@@ -1,1 +1,7 @@
-[{"description":"learing nodejs","completed":true},{"description":"learning backend","completed":true},{"description":"please learn node","completed":true},{"description":"learn react","completed":false}]
+[
+  { "description": "learing nodejs", "completed": true },
+  { "description": "learning backend", "completed": true },
+  { "description": "please learn node", "completed": true },
+  { "description": "learn react", "completed": false },
+  { "description": "learning node geekster", "completed": false }
+]

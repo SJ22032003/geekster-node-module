@@ -70,12 +70,14 @@ const deleteTask = (taskNo) => {
 }
 
 // add task to txt file
-const moveTasksToTxt = () => {
-  const getTasks = getMyTasks();
-  fs.writeFileSync(path.join(__dirname, "tasks.txt"), '');
-  getTasks.forEach((task, i) => {
-    fs.appendFileSync(path.join(__dirname, "tasks.txt"), `${i+1}. ${task.description} - [${task.completed ? "x" : " "}] \n`);
-  })
+const moveTaskToTxt = () => {
+  const tasks = getMyTasks();
+  fs.writeFileSync(path.join(__dirname, "tasks.txt"), "");
+  tasks.forEach((task, index) => {
+    fs.appendFileSync(path.join(__dirname, "tasks.txt"), 
+    `${index + 1}. ${task.description} - [${task.completed ? "x" : " "}] \n`
+  )
+  });
 }
 
 function todoManager() {
@@ -110,7 +112,7 @@ function todoManager() {
         });
         break;
       case "5":
-        moveTasksToTxt();
+        moveTaskToTxt();
         rl.close();
         break;
       default:
