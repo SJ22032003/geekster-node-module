@@ -20,6 +20,8 @@ const phoneData = [];
 
 const getPhoneData = async () => {
   const $ = await fetchDataAndLoadCheerio();
+  console.log($.html())
+
   
   $(".puisg-row").each((index, element) => {
     const data = {};
