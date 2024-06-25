@@ -1,32 +1,43 @@
-const cheerio = require('cheerio');
-const axios = require('axios');
+const cheerio = require("cheerio");
+const xlsx = require("xlsx");
 
-const url = `https://www.naukri.com/it-jobs?src=gnbjobs_homepage_srch`;
+const url = `https://www.amazon.com/s?k=phone&page=2&crid=18EUYBSP7O1SQ&qid=1702535235&sprefix=phon%2Caps%2C280&ref=sr_pg_2`;
 
-const fetchData = async () => {
-  console.log("fetching data")
-  const result = await fetch(url, {
+const fetchDataAndLoadCheerio = async () => {
+  const res = await fetch(url, {
+    method: "GET",
     headers: {
       "Content-Type": "text/html",
     },
-  });
-  return cheerio.load(await result.text());
+  })
+    .then(async (response) => await response.text())
+    .catch((err) => console.log(err));
+
+  return cheerio.load(res);
 };
 
-const getResults = async () => {
-  console.log("run")
-  const $ = await fetchData();
-  console.log($.text(), "data");
-  const getPhoneListing = $('.cust-job-tuple.layout-wrapper.lay-2.sjw__tuple');
+const phoneData = [];
 
-  const result = [];
+const getPhoneData = async () => {
+  const $ = await fetchDataAndLoadCheerio();
+  
+  $(".puisg-row").each((index, element) => {
+    const data = {};
+    data.id = index;
+    data.title = $(element).find(".a-size-medium.a-color-base.a-text-normal").text();
+    data.price = $(element).find(".a-price").text();
+    data.img = $(element).find(".s-image.s-image-optimized-rendering").attr("src");
+    phoneData.push(data);
+  });
+  return phoneData;
+};
 
-  getPhoneListing.each((i, phone) => {
-    const obj = {};
-    obj.title = $(phone).text();
-    console.log(obj.title);
-  })
-
+const createExcelFile = async () => {
+  const data = await getPhoneData();
+  const ws = xlsx.utils.json_to_sheet(data);
+  const wb = xlsx.utils.book_new();
+  xlsx.utils.book_append_sheet(wb, ws, "Phones");
+  xlsx.writeFile(wb, "phones.xlsx");
 }
 
-getResults();
+createExcelFile();
