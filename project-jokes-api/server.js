@@ -5,7 +5,14 @@ const app = express();
 
 const PORT = 8080;
 
-app.get('/jokes', (req, res) => {
+const jokeMiddleware = (req, res, next) => {
+  req["joke"] = "This is a joke";
+  console.log('Middleware triggered');
+  next();
+}
+
+app.get('/jokes', jokeMiddleware, (req, res) => {
+  console.log(req.joke);
   const requiredRandomJokeIndex= Math.floor(Math.random() * jokes.length);
   return res.status(200).json(jokes[requiredRandomJokeIndex]);
 });
