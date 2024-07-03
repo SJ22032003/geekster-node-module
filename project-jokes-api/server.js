@@ -19,8 +19,8 @@ app.get('/jokes', jokeMiddleware, (req, res) => {
 
 app.get('/joke/:jokeId', (req, res) => {
   const jokeId = req.params.jokeId; 
-  // abc --> Number(abc) --> NaN -> !NaN -> true
-  if (!Number(jokeId) || Number(jokeId) < 0){
+  // 0 --> Number(0) --> - 0  -> !0 -> true
+  if (isNaN(Number(jokeId) )|| Number(jokeId) < 0){
     return res.status(400).json({error: "Invalid joke id"});
   }
 
