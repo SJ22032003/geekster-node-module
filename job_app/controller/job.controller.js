@@ -1,25 +1,22 @@
 const JobModel = require("../model/job");
 
-const createJob = async (req, res) => {
+const createJob = async (req, res, next) => {
   try {
+
     // console.log(req.body);
-    const newlyInsertedJob = await JobModel.create(req.body);
+    await JobModel.wwe(req.body);
     // console.log(newlyInsertedJob._id);
     res.json({
       success: true,
       message: "Job created successfully",
     });
   } catch (err) {
-    // next(err);
-    console.log(err);
-    res.json({
-      success: false,
-      messae: "Something went wrong, please try again after sometime",
-    });
+    next(err);
   }
 };
 
 const listJob = async (req, res) => {
+
   const minSalary = req.query.minSalary || 0;
 
   const conditions = {};
