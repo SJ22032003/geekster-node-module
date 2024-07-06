@@ -4,7 +4,7 @@ const createJob = async (req, res, next) => {
   try {
 
     // console.log(req.body);
-    await JobModel.wwe(req.body);
+    const newlyInsertedJob = await JobModel.create(req.body);
     // console.log(newlyInsertedJob._id);
     res.json({
       success: true,
