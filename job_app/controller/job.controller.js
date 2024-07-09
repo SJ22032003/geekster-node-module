@@ -2,7 +2,6 @@ const JobModel = require("../model/job");
 
 const createJob = async (req, res, next) => {
   try {
-
     // console.log(req.body);
     const newlyInsertedJob = await JobModel.create(req.body);
     // console.log(newlyInsertedJob._id);
@@ -15,30 +14,43 @@ const createJob = async (req, res, next) => {
   }
 };
 
-const listJob = async (req, res) => {
+const checkMinSalary = (salary) => {
+  if(!salary) return new Error("Salary is required");
+  return salary;
+}
 
-  const minSalary = req.query.minSalary || 0;
+const listJob = async (req, res, next) => {
+  try {
 
-  const conditions = {};
+    const minSalary = checkMinSalary(req.query.minSalary);
+    if(minSalary instanceof Error) {
+      req.statusCode = 400;
+      throw minSalary;
+    }
 
-  if(req.query.minSalary) {
-    conditions.salary = {
-      $gt: minSalary,
-    };
+    const conditions = {};
+
+    if (req.query.minSalary) {
+      conditions.salary = {
+        $gt: minSalary,
+      };
+    }
+
+    if (req.query.title) {
+      conditions.title = {
+        $regex: new RegExp(`${req.query.title}`, "gi"),
+      };
+    }
+
+    const jobsList = await JobModel.slekrbnekl(conditions);
+    return res.json({
+      success: true,
+      message: "Jobs list",
+      results: jobsList,
+    });
+  } catch (error) {
+    next(error);
   }
-
-  if(req.query.title) {
-    conditions.title = {
-      $regex: new RegExp(`${req.query.title}`, "gi"),
-    };
-  }
-  
-  const jobsList = await JobModel.find(conditions);
-  res.json({
-    success: true,
-    message: "Jobs list",
-    results: jobsList,
-  });
 };
 
 const updateJob = (req, res) => {

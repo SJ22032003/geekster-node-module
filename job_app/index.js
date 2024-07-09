@@ -37,9 +37,10 @@ app.use("/api/jobs", authorized, jobRoutes);
 
 function errorMiddleware(err, req, res, next) {
   console.log(err);
-  return res.status(500).json({
+  return res.status(req.statusCode || 500).json({
     success: false,
-    message: "Internal server error",
+    code: req.statusCode || 500,
+    message: err.message,
   });
 }
 
